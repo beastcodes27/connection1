@@ -4,7 +4,6 @@ import { collection, query, where, getDocs } from "firebase/firestore";
 import { db } from "../firebase";
 import { FaLock, FaPlay } from "react-icons/fa";
 import PaymentModal from '../components/PaymentModal';
-import VideoPlayerModal from '../components/VideoPlayerModal';
 
 export default function ConnectionZone() {
     const [unlockedVideos, setUnlockedVideos] = useState(
@@ -14,7 +13,6 @@ export default function ConnectionZone() {
     const [loading, setLoading] = useState(true);
 
     const [selectedVideo, setSelectedVideo] = useState(null); // For payment
-    const [playingVideo, setPlayingVideo] = useState(null); // For playback
     const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
 
     useEffect(() => {
@@ -62,12 +60,6 @@ export default function ConnectionZone() {
                 amount={selectedVideo ? selectedVideo.price : 0}
                 onSuccess={handlePaymentSuccess}
             />
-            <VideoPlayerModal
-                isOpen={!!playingVideo}
-                onClose={() => setPlayingVideo(null)}
-                videoUrl={playingVideo?.videoLink}
-                title={playingVideo?.title}
-            />
             <div style={{ padding: '100px 50px', minHeight: '100vh', color: 'white' }}>
                 <h1 style={{ color: '#007bff', marginBottom: '20px' }}>CONNECTION ZONE</h1>
                 <p style={{ marginBottom: '40px', color: '#ccc' }}>Pay-Per-View Exclusive Content</p>
@@ -107,22 +99,19 @@ export default function ConnectionZone() {
                                         <h3 style={{ marginBottom: '8px', fontSize: '1rem' }}>{video.title}</h3>
                                         {video.rating && <span style={{ background: '#333', padding: '2px 6px', borderRadius: '4px', fontSize: '0.7rem', marginRight: '8px' }}>{video.rating}</span>}
                                         {isUnlocked ? (
-                                            <button
-                                                onClick={() => setPlayingVideo(video)}
-                                                style={{
-                                                    display: 'block',
-                                                    width: '100%',
-                                                    padding: '8px',
-                                                    background: '#4ca1af',
-                                                    color: 'white',
-                                                    fontWeight: 'bold',
-                                                    textAlign: 'center',
-                                                    border: 'none',
-                                                    cursor: 'pointer',
-                                                    borderRadius: '4px',
-                                                    marginTop: '10px',
-                                                    fontSize: '0.9rem'
-                                                }}>WATCH NOW</button>
+                                            <a href={video.videoLink || '#'} target="_blank" rel="noopener noreferrer" style={{
+                                                display: 'block',
+                                                width: '100%',
+                                                padding: '8px',
+                                                background: '#4ca1af',
+                                                color: 'white',
+                                                fontWeight: 'bold',
+                                                textAlign: 'center',
+                                                textDecoration: 'none',
+                                                borderRadius: '4px',
+                                                marginTop: '10px',
+                                                fontSize: '0.9rem'
+                                            }}>WATCH NOW</a>
                                         ) : (
                                             <button
                                                 onClick={() => handleUnlockClick(video)}

@@ -4,14 +4,12 @@ import { collection, query, where, getDocs } from "firebase/firestore";
 import { db } from "../firebase";
 import { FaPlay } from "react-icons/fa";
 import PaymentModal from '../components/PaymentModal';
-import VideoPlayerModal from '../components/VideoPlayerModal';
 
 export default function WakubwaZone() {
     const [subscribed, setSubscribed] = useState(false);
     const [videos, setVideos] = useState([]);
     const [loading, setLoading] = useState(true);
     const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
-    const [playingVideo, setPlayingVideo] = useState(null);
 
     useEffect(() => {
         // Check local storage subscription
@@ -55,12 +53,6 @@ export default function WakubwaZone() {
                 onClose={() => setIsPaymentModalOpen(false)}
                 amount={1500}
                 onSuccess={handleSubscriptionSuccess}
-            />
-            <VideoPlayerModal
-                isOpen={!!playingVideo}
-                onClose={() => setPlayingVideo(null)}
-                videoUrl={playingVideo?.videoLink}
-                title={playingVideo?.title}
             />
             <div style={{ padding: '160px 50px', minHeight: '100vh', color: 'white' }}>
                 <h1 style={{ color: '#E50914', marginBottom: '20px' }}>WAKUBWA ZONE</h1>
@@ -127,23 +119,21 @@ export default function WakubwaZone() {
                                         borderRadius: '4px',
                                         position: 'relative'
                                     }}>
-                                        <div
-                                            onClick={() => setPlayingVideo(video)}
-                                            style={{
-                                                fontSize: '2rem',
-                                                background: 'rgba(0,0,0,0.6)',
-                                                borderRadius: '50%',
-                                                width: '50px',
-                                                height: '50px',
-                                                display: 'flex',
-                                                alignItems: 'center',
-                                                justifyContent: 'center',
-                                                cursor: 'pointer',
-                                                color: 'white',
-                                            }}
-                                        >
+                                        <a href={video.videoLink || '#'} target="_blank" rel="noopener noreferrer" style={{
+                                            fontSize: '2rem',
+                                            background: 'rgba(0,0,0,0.6)',
+                                            borderRadius: '50%',
+                                            width: '50px',
+                                            height: '50px',
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            justifyContent: 'center',
+                                            cursor: 'pointer',
+                                            color: 'white',
+                                            textDecoration: 'none'
+                                        }}>
                                             <FaPlay />
-                                        </div>
+                                        </a>
                                         <span style={{ position: 'absolute', bottom: '10px', left: '10px', fontWeight: 'bold', textShadow: '1px 1px 2px black' }}>{video.title}</span>
                                     </div>
                                 ))}
