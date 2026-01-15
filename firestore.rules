@@ -21,7 +21,7 @@ service cloud.firestore {
     // - Authenticated users can read videos
     // - Only admins can create, update, or delete videos
     match /videos/{videoId} {
-      allow read: if request.auth != null;
+      allow read: if true; 
       allow write: if isAdmin();
     }
 

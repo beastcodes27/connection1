@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Navbar from '../components/Navbar';
-import { collection, query, where, getDocs } from "firebase/firestore";
+import { collection, query, where, getDocs, orderBy } from "firebase/firestore";
 import { db } from "../firebase";
 import { FaPlay } from "react-icons/fa";
 import PaymentModal from '../components/PaymentModal';
@@ -21,7 +21,7 @@ export default function WakubwaZone() {
         // Fetch videos
         async function fetchVideos() {
             try {
-                const q = query(collection(db, "videos"), where("zone", "==", "wakubwa"));
+                const q = query(collection(db, "videos"), where("zone", "==", "wakubwa"), orderBy("createdAt", "desc"));
                 const querySnapshot = await getDocs(q);
                 const fetchedVideos = querySnapshot.docs.map(doc => ({
                     id: doc.id,
